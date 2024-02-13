@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - ritika
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Send Email on Failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Tests Failed"
+          to: divyashukl35@gmail.com
+          from: divyashukl35@gmail.com
+          message: "Tests failed for branch: ${{ github.ref }}"
+
+      - name: Send Email on Success
+        if: success()
+        uses: dawidd6/action-send-mail@v2
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Tests Passed"
+          to: divyashukl35@gmail.com
+          from: divyashukl35@gmail.com
+          message: "Tests passed for branch: ${{ github.ref }}"
