@@ -13,8 +13,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      
-
       - name: Send Email on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v2
@@ -26,7 +24,7 @@ jobs:
           subject: "Tests Failed"
           to: divyashukl35@gmail.com
           from: divyashukl35@gmail.com
-          message: "Tests failed for branch: ${{ github.ref }}"
+          body: "Tests failed for branch: ${{ github.ref }}"
 
       - name: Send Email on Success
         if: success()
@@ -39,4 +37,4 @@ jobs:
           subject: "Tests Passed"
           to: divyashukl35@gmail.com
           from: divyashukl35@gmail.com
-          message: "Tests passed for branch: ${{ github.ref }}"
+          body: "Tests passed for branch: ${{ github.ref }}"
